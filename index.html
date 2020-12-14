@@ -43,6 +43,18 @@
                 <div class="message" >No results found.</div>
             </div>
       </div>
+      <div style="margin-bottom: 15px;margin-top: 30px;">弹窗测试：</div>
+      <a href="./dialog/dialogTest.html" target="_blank">
+          <button>弹窗测试</button>
+      </a>
+      <div style="margin-bottom: 15px;margin-top: 30px;">拖动窗体：</div>
+      <a href="./other/dragElement.html" target="_blank">
+          <button>拖动窗体</button>
+      </a>
+      <div style="margin-bottom: 15px;margin-top: 30px;">模仿练习：</div>
+      <a href="./demo&practice/demo.html" target="_blank">
+          <button>模仿练习</button>
+      </a>
   </body>
 <style>
     .regions {
@@ -90,6 +102,7 @@
 
 /* 第三种 */
     .dropdown {
+        position: fixed;
         cursor: pointer;
         line-height: 1em;
         white-space: normal;
@@ -173,21 +186,21 @@
     $.ajaxSetup({async :false});
     function getProvinces(){
         let objProvince = [];
-        $.get("regions/province.json",function (obj){
+        $.get("./areas/regions/province.json",function (obj){
             objProvince = obj.reverse();
         });
         return objProvince;
     }
     function getCities(){
         let objCity = [];
-        $.get("regions/city.json", function (obj){
+        $.get("./areas/regions/city.json", function (obj){
             objCity = obj;
         });
         return objCity
     }
     function getCounties(){
         let objCountry = []
-        $.get("regions/county.json", function (obj){
+        $.get("./areas/regions/county.json", function (obj){
             objCountry = obj;
         });
         return objCountry
