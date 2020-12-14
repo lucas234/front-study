@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>鼠标拖动DIV</title>
+    <style type="text/css">
+
+        #item {
+            position: fixed;
+            display: block;
+            background: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 300px;
+            max-width: 90%;
+            max-height: 80%;
+            left: 0;
+            right: 0;
+            top: 30%;
+            margin: 0 auto;
+            z-index: 999;
+            touch-action: none;
+            user-select: none;
+        }
+        .message-title {
+            height: 45px;
+            color: #615d5d;
+            line-height: 45px;
+            font-size: 15px;
+            border-bottom: 1px solid #eee;
+            padding: 0 12px;
+            z-index: -888;
+        }
+        .message-content {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 24px;
+            color: #666;
+            overflow-y: auto;
+        }
+        .message-btn button {
+            /*float: left;*/
+            border: 0;
+            cursor: pointer;
+            background: #fff;
+            width: 100%;
+            line-height: 45px;
+            font-size: 15px;
+            /*text-align: center;*/
+            border-top: 1px solid #eee;
+            color: #888;
+            outline:none;
+        }
+
+        .message-btn:hover button{
+            color: #626161;
+        }
+        body{
+            background-color: #333;
+        }
+
+    </style>
+</head>
+<body>
+<div id="container">
+    <div id="item">
+        <div id = "4444" class="message-title">温馨提示</div>
+        <div class="message-content">提交成功，谢谢！</div>
+        <div class="message-btn">
+            <button onclick="this.parentElement().parentElement">确定</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    // dragElement("item")
+    // function dragElement(elementId){
+    //     //获取元素
+    //     var dv = document.getElementById(elementId)
+    //     var x = 0;
+    //     var y = 0;
+    //     var l = 0;
+    //     var t = 0;
+    //     var isDown = false;
+    //     //鼠标按下事件
+    //     dv.onmousedown = function(e) {
+    //         //获取x坐标和y坐标
+    //         x = e.pageX;
+    //         y = e.pageY;
+    //         //获取左部和顶部的偏移量
+    //         l = dv.offsetLeft;
+    //         t = dv.offsetTop;
+    //         //开关打开
+    //         isDown = true;
+    //         //设置样式
+    //         dv.style.cursor = 'move';
+    //
+    //     }
+    //     //鼠标移动
+    //     window.onmousemove = function(e) {
+    //         if (isDown === false) {
+    //             return;
+    //         }
+    //         //获取x和y
+    //         var nx = e.pageX;
+    //         var ny = e.pageY;
+    //         //计算移动后的左偏移量和顶部的偏移量
+    //         var nl = nx - (x - l);
+    //         var nt = ny - (y - t);
+    //
+    //         dv.style.left = nl + 'px';
+    //         dv.style.top = nt + 'px';
+    //     }
+    //     //鼠标抬起事件
+    //     window.onmouseup = function(e) {
+    //         //开关关闭
+    //         isDown = false;
+    //         dv.style.cursor = 'default';
+    //         e.cancelBubble = true;
+    //     }
+    // }
+
+    jqueryDrag("#item")
+    function jqueryDrag(element){
+        //样式
+        let $drag = $(element);
+        $drag.css({"cursor": "move"})
+        /*+++++ 拖曳效果 ++++++
+         *原理：标记拖曳状态dragging ,坐标位置iX, iY
+         *         mousedown:fn(){dragging = true, 记录起始坐标位置，设置鼠标捕获}
+         *         mouseover:fn(){判断如果dragging = true, 则当前坐标位置 - 记录起始坐标位置，绝对定位的元素获得差值}
+         *         mouseup:fn(){dragging = false, 释放鼠标捕获，防止冒泡}
+         */
+        let dragging = false;
+        let drg_h, drg_w, pos_y, pos_x;
+        $drag.mousedown(function(e) {
+            dragging = true;
+            drg_h = $drag.outerHeight();
+            drg_w = $drag.outerWidth();
+            pos_y = $drag.offset().top + drg_h - e.pageY;
+            pos_x = $drag.offset().left + drg_w - e.pageX;
+            this.setCapture && this.setCapture();
+            return false;
+        });
+        document.onmousemove = function(e) {
+            if (dragging) {
+                $drag.offset({
+                    top:e.pageY + pos_y - drg_h,
+                    left:e.pageX + pos_x - drg_w
+                });
+                return false;
+            }
+        };
+        $drag.mouseup(function(e) {
+            dragging = false;
+            $drag[0].releaseCapture();
+            e.cancelBubble = true;
+        })
+    }
+
+    // (function($) {
+    //     $.fn.drags = function(opt) {
+    //
+    //         opt = $.extend({handle:"",cursor:"move"}, opt);
+    //
+    //         if(opt.handle === "") {
+    //             var $el = this;
+    //         } else {
+    //             var $el = this.find(opt.handle);
+    //         }
+    //
+    //         return $el.css('cursor', opt.cursor).on("mousedown", function(e) {
+    //             if(opt.handle === "") {
+    //                 var $drag = $(this).addClass('draggable');
+    //             } else {
+    //                 var $drag = $(this).addClass('active-handle').parent().addClass('draggable');
+    //             }
+    //             var z_idx = $drag.css('z-index'),
+    //                 drg_h = $drag.outerHeight(),
+    //                 drg_w = $drag.outerWidth(),
+    //                 pos_y = $drag.offset().top + drg_h - e.pageY,
+    //                 pos_x = $drag.offset().left + drg_w - e.pageX;
+    //             $drag.css('z-index', 1000).parents().on("mousemove", function(e) {
+    //                 $('.draggable').offset({
+    //                     top:e.pageY + pos_y - drg_h,
+    //                     left:e.pageX + pos_x - drg_w
+    //                 }).on("mouseup", function() {
+    //                     $(this).removeClass('draggable').css('z-index', z_idx);
+    //                 });
+    //             });
+    //             e.preventDefault(); // disable selection
+    //         }).on("mouseup", function() {
+    //             if(opt.handle === "") {
+    //                 $(this).removeClass('draggable');
+    //             } else {
+    //                 $(this).removeClass('active-handle').parent().removeClass('draggable');
+    //             }
+    //         });
+    //
+    //     }
+    // })(jQuery);
+    // $('#item').drags();
+
+</script>
+</body>
+</html>
+

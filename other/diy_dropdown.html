@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="../public/favicon.ico">
+    <title>TestHub</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.staticfile.org/ionicons/2.0.1/css/ionicons.min.css">
+</head>
+<body>
+<div style="margin-bottom: 15px;margin-top: 30px;">利用div自定义 dropdown</div>
+<div class="dropdown" tabindex="-1">
+    <input class="search" autocomplete="on" tabindex="0">
+    <i class="icon ion-arrow-down-b"></i>
+    <div class="text">省</div>
+    <div class="menu" style="display: none">
+        <div class="message" >No results found.</div>
+    </div>
+</div>
+</body>
+<style>
+    .dropdown {
+        cursor: pointer;
+        line-height: 1em;
+        white-space: normal;
+        outline: 0;
+        transform: rotateZ(0);
+        min-width: 160px;
+        min-height: 13px;
+        background: #fff;
+        display: inline-block;
+        padding: 7px 7px;
+        color: rgba(0,0,0,.87);
+        box-shadow: none;
+        border: 1px solid rgba(34,36,38,.15);
+        border-radius: .28571429rem;
+        transition: box-shadow .1s ease,width .1s ease,-webkit-box-shadow .1s ease;
+    }
+    .dropdown:hover{
+        border-color: #66afe9;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+    }
+    .search{
+        /*font-size: 1em;*/
+        position: absolute;
+        border: 0;
+        outline: none;
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 4px;
+        width: 149px;
+        font-size: 14px;
+        z-index: 2;
+    }
+
+    i.icon.ion-arrow-down-b{
+        font-size: 12px;
+        color: #4e4d4d;
+        z-index: 3;
+        position: absolute;
+        opacity: .8;
+        right: 8px;
+        padding-top: 1px;
+    }
+    .search,.text{
+        display: inline-block;
+    }
+    .text{
+        cursor: text;
+        position: relative;
+        left: 1px;
+        z-index: 3;
+        font-size: 14px;
+        color: #cdcbcb;
+    }
+    .message{
+        display: none;
+        font-size: 14px;
+        color: #a1a3a5;
+    }
+    .menu{
+        max-height: 170px;
+        width:auto;
+        overflow-y:auto;
+        margin-top: 6px;
+        position: relative;
+    }
+    .item{
+        font-size: 14px;
+        padding: 6px 2px;
+    }
+    .item:hover {
+        background-color: #f1f1f1;
+    }
+    /*scroll bar style only apply in chrome*/
+    .menu::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 8px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 8px;
+    }
+    .menu::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        background: rgba(0,0,0,.1);
+        border-radius: 5px;
+    }
+    .menu::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        cursor: pointer;
+        border-radius: 5px;
+        background-color: rgba(0,0,0,.25);
+        -webkit-transition: color .2s ease;
+        transition: color .2s ease;
+    }
+
+
+</style>
+<script>
+    // 只有设置成同步时,Ajax中的变量才可以赋值成功
+    $.ajaxSetup({async :false});
+    function getProvinces(){
+        let objProvince = [];
+        $.get("areas/regions/province.json",function (obj){
+            objProvince = obj.reverse();
+        });
+        return objProvince;
+    }
+
+    function getAreaString(){
+        let html = "";
+        let provinceSelected = $("#province option:selected");
+        let citySelected = $("#cities option:selected");
+        let countySelected = $("#county option:selected");
+        html += provinceSelected.val() ? " "+ provinceSelected.html() : "";
+        html += citySelected.val() ? " "+ citySelected.html() : "";
+        html += countySelected.val() ? " "+ countySelected.html() : "";
+        alert(html)
+    }
+
+    $.each(getProvinces(), function (i, val){
+        $(".menu").prepend("<div class='item' data-value='"+val.id+"'>"+val.name+"</div>");
+    });
+
+    const selected  = '省'
+    let getItemText = selected;
+    let mentHeight = $('.menu').css('height');
+    //输入框输入关键字时动态匹配
+    $(".search").on("input",function(e){
+        let search = $('.search ');
+        let key=search.val();
+        let text = $(".text");
+        let message = $('.message');
+        let flagCount = 0;
+        text.text("");
+        message.css({"display":"none"});
+        $('.item').each(function(i,item){
+            if($(this).text().indexOf(key)>-1){
+                $(this).show();
+                flagCount +=1;
+                e.stopPropagation();
+            }else
+                $(this).hide();
+            e.stopPropagation();
+        });
+        if(flagCount===0){
+            message.css({"display":"block"});
+            $('.menu').css('height','auto')
+        }
+        if (search.val()===""){
+            message.css({"display":"none"});
+            $('.menu').css('height',mentHeight)
+            text.text(getItemText);
+        }
+    })
+
+    $(function (){
+        let menu = $(".menu");
+        let search = $(".search");
+        let text = $(".text")
+        //点击输入框 显示 dropdown
+        search.click(function (e){
+            menu.show()
+            e.stopPropagation();
+        });
+        //点击其他地方dropdown消失
+        $(document).click(function(e){
+            menu.hide();
+            e.stopPropagation();
+        });
+        // 选择option
+        $(".item").click(function (e){
+            menu.hide();
+            e.stopPropagation();
+            search.val('');
+            text.text($(this).html());
+            text.css("color", "black");
+            $(".item").css({"font-weight":"normal"});
+            getItemText =  $(this).html();
+            $(this).css({"font-weight":"bold"});
+        });
+        //点击小图标 显示/消失 dropdown
+        $('.icon').click(function (e){
+            if(menu.css('display') === 'none'){
+                menu.show();
+                e.stopPropagation();
+            }else {
+                menu.hide();
+            }
+        })
+    })
+
+    //聚焦时显示、样式
+    $('.search').focus(function(e){
+        let message = $('.message');
+        // message.css({"display":"none"});
+        let key=$('.search ').val();
+        let flagCount = 0;
+        $('.item').each(function(i,item){
+            if($(this).text().indexOf(key)>-1){
+                $(this).show();
+                flagCount +=1;
+                e.stopPropagation();
+            }else
+                $(this).hide();
+                e.stopPropagation();
+        });
+        if(flagCount===0){
+            message.css({"display":"block"});
+            $('.menu').css('height','auto')
+        }else {
+            $('.menu').css('height',mentHeight)
+        }
+        $(".text").css("color", "#aba9a9");
+    })
+        .blur(function(){
+            let text = $(".text")
+            if (text.text()!==selected) {
+                text.css("color", "black");
+            }else {
+                text.css("color", "#cdcbcb");
+            }
+    })
+    // onfocus="if(value) {this.placeholder=value;value=''}" onblur="if (placeholder!=='省') {value=this.placeholder;this.placeholder='省'}"
+
+</script>
+</html>

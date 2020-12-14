@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="./Dialog.js"></script>
+    <link rel="stylesheet" href="./Dialog.css" type="text/css" />
+</head>
+<body>
+<button class="btn" id="toast">toast</button>
+<button class="btn" id="message">message</button>
+<button class="btn" id="confirm">confirm</button>
+<div id="p-toast"></div>
+<div id="p-message"></div>
+<div id="p-confirm"></div>
+</body>
+<script>
+    let confirm,toast,message
+    $(function(){
+        toast = $("#p-toast").dialogPlugin({type:"toast",message:"请确保输入信息正确！",
+            toastConfig:{ toastLevel: 'warning',
+                          timeout:3000}});
+        $("#toast").on('click', function() {
+            toast.showDialog();
+        });
+
+        confirm = $("#p-confirm").dialogPlugin({type:"confirm",
+            message:"Are you sure to delete this item?",
+            isShowMask:true,
+            confirmConfig:{ title:"warm prompt",
+                            clickOk:"testClick",
+                            hideDialog:'testHide',
+                            }});
+        $("#confirm").on('click', function() {
+            confirm.showDialog();
+        });
+        message = $("#p-message").dialogPlugin({type:"message",
+            isShowMask:true,
+            message:"提交成功，谢谢！",
+            messageConfig:{ title:"温馨提示",
+                            clickOk:"testClick",
+                            }});
+        $("#message").on('click', function() {
+            message.showDialog();
+        });
+    })
+    function testClick(){
+        confirm.hideDialog();
+        message.hideDialog()
+        // other action
+    }
+
+    function testHide(){
+        confirm.hideDialog();
+        message.hideDialog()
+        // other action
+    }
+
+</script>
+<style>
+    .btn{
+        opacity: 1;
+        border-radius: 3px;
+        border: 1px solid #d83f87;
+        color: #fafafd;
+        cursor: pointer;
+        background: #d83f87;
+    }
+</style>
+</html>

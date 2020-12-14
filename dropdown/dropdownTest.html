@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.staticfile.org/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="./Dropdown.js"></script>
+    <link rel="stylesheet" href="./Dropdown.css" type="text/css" />
+    <script>
+        let province = [
+            {
+                "name": "北京市",
+                "id": "110000000000"
+            },
+            {
+                "name": "天津市",
+                "id": "120000000000"
+            },
+            {
+                "name": "河北省",
+                "id": "130000000000"
+            },
+            {
+                "name": "山西省",
+                "id": "140000000000"
+            },
+            {
+                "name": "内蒙古自治区",
+                "id": "150000000000"
+            },
+            {
+                "name": "辽宁省",
+                "id": "210000000000"
+            },
+            {
+                "name": "吉林省",
+                "id": "220000000000"
+            },
+            {
+                "name": "黑龙江省",
+                "id": "230000000000"
+            },
+            {
+                "name": "上海市",
+                "id": "310000000000"
+            },
+            {
+                "name": "江苏省",
+                "id": "320000000000"
+            },
+            {
+                "name": "浙江省",
+                "id": "330000000000"
+            },
+            {
+                "name": "安徽省",
+                "id": "340000000000"
+            },
+            {
+                "name": "福建省",
+                "id": "350000000000"
+            },
+            {
+                "name": "江西省",
+                "id": "360000000000"
+            },
+            {
+                "name": "山东省",
+                "id": "370000000000"
+            },
+            {
+                "name": "河南省",
+                "id": "410000000000"
+            },
+            {
+                "name": "湖北省",
+                "id": "420000000000"
+            },
+            {
+                "name": "湖南省",
+                "id": "430000000000"
+            },
+            {
+                "name": "广东省",
+                "id": "440000000000"
+            },]
+        $(function(){
+            let dropdown = $("#test").plugin({provinces:province});  //对哪个dom元素，调用aaa方法
+        })
+
+    </script>
+</head>
+<body>
+    <div id="test"></div>
+</body>
+</html>

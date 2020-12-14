@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="../public/favicon.ico">
+    <title>TestHub</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="mask"></div>
+    <div id="header">
+        <a id="logoContainer" href="https://www.baidu.com/"></a>
+        <div class="dropdown">
+            <div class="headerRight dropbtn" id="userNameContainer" style="
+              padding-right:25px;
+              background-image: url(./assets/arrrow_down_kinda_slim.svg);
+              background-size: 10px 10px;
+              background-position: 99% 68%;
+              background-repeat: no-repeat;
+              margin-top: 20px;
+              text-align: right;
+              font-size: 14px;
+              color: #D2D6DE ;
+              cursor: pointer;" >lucas</div>
+            <div id="myDropdown" class="dropdown-content">
+                <a href="settings" id="settings_menu_item">Settings</a>
+                <a href="logout" id="logout_menu_item">Log Out</a>
+            </div>
+        </div>
+        <div style="display:inline-block" id="topLinksContainer">
+            <div class="topLink"><a id="selectedTopLink" href="tests">Web Tests</a></div>
+            <div class="topLink"><a id="testsTopLink" href="mobile-tests">Mobile Tests</a></div>
+            <div class="topLink"><a id="resultsTopLink" href="results">Results</a></div>
+            <div class="topLink"><a id="schedulerTopLink" href="scheduler">Scheduler</a></div>
+            <div class="topLink"><a id="backupsTopLink" href="backups">Backups</a></div>
+            <div class="topLink"><a id="driveTopLink" href="drive">Drive</a></div>
+            <div class="topLink"><a id="activityTopLink" href="activity">Activity</a></div>
+            <div class="topLink"><a id="documentationTopLink" href="documentation">Documentation</a></div>
+        </div>
+    </div>
+    <div id="content">
+        <div id="container" style="min-height: 768px;">
+            <div id="containerForMessages"></div>
+            <div id="containerForCrumbs">
+                <div id="testsPageTitle">TESTS</div>
+                <a id="suiteCrumbId" title="" style="display: none;">none</a>
+            </div>
+            <div id="containerSuiteButtons" style="display: block;">
+                <button onclick="openNewSuiteModal()" type="button" id="addSuiteBtn">New Test Suite</button>
+                <button onclick="openChromeExtensionTab()" type="button" id="getChromeExtension">Get Endtest Chrome Extension</button>
+                <div id="howDoIGetStarted" onclick="openHowDoIGetStartedModal()"></div>
+                <div id="testSuitesText"></div>
+            </div>
+            <div id="headerSuites">
+                Web Test Suites
+                <div id="headerSuitesLabels" title="Actions">
+                    <div id="editSuiteLabel" title="Edit" class="suiteActionLabel">Edit</div>
+                    <div id="runSuiteLabel" title="Run" class="suiteActionLabel">Run</div>
+                    <div id="exportSuiteLabel" title="Export" class="suiteActionLabel">Export</div>
+                    <div id="backupSuiteLabel" title="Backup" class="suiteActionLabel">Backup</div>
+                    <div id="settingsSuiteLabel" title="Settings" class="suiteActionLabel">Settings</div>
+                    <div id="duplicateSuiteLabel" title="Duplicate" class="suiteActionLabel">Duplicate</div>
+                    <div id="deleteSuiteLabel" title="Delete" class="suiteActionLabel">Delete</div>
+                </div>
+            </div>
+            <div class="suites" id="suite1">
+                <div id="editOnName" onclick="getSuiteId(150646)">Wikipedia - Demo Test Suite</div>
+                <div id="deleteTestSuiteButton" onclick="showConfirmationModal(&quot;Are you sure you want to delete Wikipedia - Demo Test Suite test suite?&quot;,150646,'Wikipedia - Demo Test Suite','suite')" title="Delete test suite"></div>
+                <div id="duplicateTestSuiteButton" onclick="duplicateTestSuite(150646,'Wikipedia - Demo Test Suite')" title="Duplicate test suite"></div>
+                <div id="settingsTestSuiteButton" onclick="openNewSettingsModal(150646)" title="Settings"></div>
+                <div id="backupTestSuiteButton" onclick="createBackup(&quot;Are you sure you want to delete Wikipedia - Demo Test Suite test suite?&quot;,150646,'Wikipedia - Demo Test Suite','suite')" title="Create a backup for this test suite"></div>
+                <div id="exportTestSuiteButton" onclick="exportSuite(150646,'Wikipedia_-_Demo_Test_Suite')" title="Export test suite"></div>
+                <div id="runTestSuiteButton" onclick="runSuite(150646,'Wikipedia_-_Demo_Test_Suite')" title="Run test suite"></div>
+                <div class="editTestSuite" id="editTestSuiteButton" name="editTestSuite" onclick="getSuiteId(150646)" title="Edit test suite"></div>
+            </div>
+            <div id="dialog">
+                <div id="closeModalButton" title="closenewSuiteModal" onclick="closenewSuiteModal()" >✖</div>
+                <div name="newSuiteModalTitle" id="newSuiteModalTitle">New Test Suite</div>
+                <div name="containerForNewTestSuiteName" id="containerForNewTestSuiteName" class="doRemoveContainer">
+                    <input type="text" name="newTestSuiteNameInput" id="newTestSuiteNameInput" class="doRemove" title="Test Suite Name" placeholder="Test Suite Name" onchange="trimSpaces(this)">
+                    <div name="errorForNewTestSuiteName" id="errorForNewTestSuiteName" class="doRemoveContainer" title="Error"></div>
+                </div>
+                <div id="containerForButtons">
+                    <input type="button" name="Save" value="Save" id="saveNewPasswordButton" title="Save" class="doRemove" onclick="saveNewTestSuite()">
+                    <input type="button" name="Cancel" value="Cancel" id="cancelButton" title="Cancel" class="doRemove" onclick="closenewSuiteModal()">
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+    }
+    #container {
+        #top: 64px;
+        #left: 73px;
+        #width: 1367px;
+        width: 100%;
+        #height: 836px;
+        background-color: #fff;
+        #background: 0% 0% no-repeat padding-box padding-box rgb(250, 252, 254);
+        opacity: 1;
+        min-height: 900px;
+        display: block;
+        margin: auto;
+        #padding-top: 56px;
+        min-width: 1240px;
+        padding-bottom: 60px;
+        /* opacity: 0.86; */
+        border-radius: 5px;
+        min-height: 100%;
+    }
+    #header{
+        background-color: #252f3f;
+        position: relative;
+        /*z-index: 9999999999;*/
+        opacity: 1;
+        height: 60px;
+        min-height: 30px;
+        margin-top: 0;
+        min-width: 1200px;
+        /*width: 100%;*/
+        font-family: 'Titillium Web', sans-serif;
+        overflow: visible;
+        #border-bottom: 2px solid #E0E0E0;
+        #position: fixed;
+        box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.2);
+        padding-right: 5%;
+    }
+    #logoContainer {
+        background-image: url(assets/logo.png);
+        background-repeat: no-repeat;
+        background-size: 40px 40px;
+        margin-left: 5%;
+        margin-right: 22px;
+        width: 40px;
+        height: 40px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: inline-block;
+        filter: grayscale(5%);
+        opacity: 0.95;
+        vertical-align: middle;
+    }
+    .topLink{
+        display: inline-block;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 10px;
+    }
+    .topLink:hover a{
+        border-radius: 5px;
+        background-color: #344158;
+    }
+    .topLink a {
+        margin-top: 4px;
+        padding-right: 10px;
+        padding-left: 10px;
+        font-size: 13px;
+        padding-top: 10px;
+        text-decoration: none;
+        color: white;
+        #letter-spacing: 1px;
+        height: 25px;
+        #text-transform: uppercase;
+        /*font-weight: 500;*/
+        display: inline-block;
+
+    }
+    #selectedTopLink {
+        background-color: #161E2E !important;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+        display: inline-block;
+        height: 25px;
+        font-size: 13px;
+        margin-left: 12px;
+    }
+    #testsTopLink, #backupsTopLink, #documentationTopLink, #activityTopLink , #resultsTopLink, #schedulerTopLink, #driveTopLink {
+        display: inline-block;
+        height: 25px;
+        color: rgb(210, 214, 220);
+        font-size: 13px;
+        margin-left: 12px;
+    }
+    .dropdown{
+        float: right;
+        margin-right: 7px;
+        /*display: inline-block;*/
+        position: relative;
+        display: inline-block;
+    }
+    #myDropdown {
+        background-color: #252f3f;
+        font-weight: bold;
+        position: absolute;
+        right: 0px;
+        width: 100%;
+        min-width: 90px;
+        max-width: 110px;
+        display: none;
+    }
+    #myDropdown a {
+        color: rgb(210, 214, 220);
+        border-bottom: 1px solid rgba(0,0,0,0.2);
+        padding: 12px 18px;
+        /*font-weight: 400;*/
+        text-decoration:none;
+        font-size: 13px;
+        display: block;
+        font-family: 'Titillium Web', sans-serif;
+    }
+    #myDropdown a:hover{
+        background-color: #344158;
+    }
+    #settings_menu_item{
+        margin-top: 12px;
+    }
+
+/*content*/
+    #content {
+        min-height: 100%;
+        padding-top: 50px;
+        height: auto;
+        width: 100%;
+        padding-bottom: 0px;
+        #background-color: rgb(250, 252, 254);
+    }
+    #containerForCrumbs{
+        display: none;
+    }
+
+    #addCaseButton,#addSuiteBtn {
+        padding-left: 30px;
+        background-image: url(assets/add.svg);
+        background-color: white;
+        background-repeat: no-repeat;
+        background-position: 0px 7px;
+        background-size: contain;
+        background-size: 28px 28px;
+        border: 0px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+        margin-right: 0px;
+        margin-left: 5%;
+        font-size: 14px;
+        text-align: center;
+        font-weight: 400 !important;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        height: 42px;
+        /*font-family: 'Lato' !important;*/
+        /*background-color: transparent;*/
+        width: 150px;
+        color: #d83f87;
+        outline: none !important;
+        cursor: pointer;
+    }
+    #getChromeExtension {
+        float: right;
+        margin-left: 30px;
+        padding-left: 36px;
+        background-image: url(assets/endtest_logo_purple.png);
+        background-color: white;
+        background-repeat: no-repeat;
+        background-position: 0px 4px;
+        background-size: contain;
+        background-size: 34px 34px;
+        border: 0px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+        margin-right: 5%;
+        font-size: 14px;
+        text-align: center;
+        font-weight: 400 !important;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        height: 42px;
+        width: 250px;
+        color: #44318d;
+        outline: none !important;
+
+    }
+    #headerSuites, #headerCases, #headerSteps {
+        background-color: transparent;
+        width: 90%;
+        font-size: 14px;
+        padding-bottom: 10px;
+        padding-top: 20px;
+        padding-left: 10px;
+        color: #cc4876 !important;
+        opacity: 1;
+        margin-left: 5%;
+        #border-bottom: 1px solid #E0E0E0;
+        font-family: 'Lato' !important;
+        font-weight: 400;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    #headerSuitesLabels, #headerCasesLabels, #headerStepLabels {
+        background-color: transparent;
+        height: 20px;
+        float: right;
+        right: 0;
+        font-size: 14px;
+    }
+    .suiteActionLabel, .caseActionLabel, .stepActionLabel {
+        display: inline-block;
+        margin-right: 20px;
+        text-align: center;
+        float: none !important;
+        width: 50px;
+    }
+    .suites {
+        display:inline-block;
+        box-shadow: 0 0 30px #ddd;
+        border-radius: 4px;
+        /* box-shadow: 0 6px 2px -2px #F0F0F0; */
+        margin-bottom: 10px;
+        height: 65px;
+        width: 85.5%;
+        padding-bottom: 10px;
+        padding-top: 14px;
+        padding-left: 70px;
+        color: black;
+        background-image: url(assets/Folder-icon.png);
+        background-color: white;
+        background-repeat: no-repeat;
+        background-position: 22px 45%;
+        background-size: 26px 26px;
+        margin-left: 5%;
+        opacity: 0.95;
+    }
+    #editOnName {
+        display: inline-block;
+        height: 30px;
+        padding-top: 20px;
+        cursor: pointer;
+    }
+    #editTestSuiteButton, #editTestCaseButton {
+        background-image: url(assets/004-pencil-1.svg);
+        float: right;
+        background-repeat: no-repeat;
+        padding-left: 24px;
+        background-position: center;
+        background-size: 20px 20px;
+    }
+    #runTestSuiteButton {
+        background-image: url(assets/004-arrow.svg);
+        float: right;
+        background-repeat: no-repeat;
+        padding-left: 24px;
+        background-position: center;
+        background-size: 20px 20px;
+    }
+    #exportTestSuiteButton {
+        background-image: url(assets/005-download.svg);
+        float: right;
+        background-repeat: no-repeat;
+        padding-left: 22px;
+        background-position: center;
+        background-size: 20px 20px;
+    }
+    #backupTestSuiteButton {
+        background-image: url(assets/002-server.svg);
+        float: right;
+        background-repeat: no-repeat;
+        padding-left: 32px;
+        background-position: center;
+        background-size: 20px 20px;
+    }
+    #settingsTestSuiteButton {
+        background-image: url(assets/003-gear.svg);
+        float: right;
+        background-repeat: no-repeat;
+        padding-left: 22px;
+        background-position: center;
+        background-size: 20px 20px;
+    }
+    #duplicateTestSuiteButton, #duplicateTestCaseButton {
+        background-image: url(assets/001-copy.svg);
+        float: right;
+        background-repeat: no-repeat;
+        padding-left: 20px;
+        background-position: center;
+        background-size: 20px 20px;
+    }
+    #deleteTestSuiteButton, #deleteTestCaseButton {
+        background-image: url(assets/002-cancel.svg);
+        float: right;
+        background-repeat: no-repeat;
+        padding-left: 20px;
+        background-position: center;
+        background-size: 20px 20px;
+    }
+    #editTestSuiteButton, #deleteTestSuiteButton, #duplicateTestSuiteButton, #exportTestSuiteButton, #runTestSuiteButton, #editTestCaseButton, #deleteTestCaseButton, #deleteTestRunButton, #transferTestCaseButton, #duplicateTestCaseButton, #stepDragButton, #stepDeleteButton, #moveDownTestCaseButton, #moveUpTestCaseButton, #restoreBackupButton, #backupTestSuiteButton, #stepSkipButton, #scheduleHourForItem, #onlyMeFileIcon, #myEntireTeamFileIcon, #moveTestCaseButton, #copyFileUrlToClipboardButton, #getInfoTestCaseButton, #settingsTestSuiteButton {
+        height: 100%;
+        font-size: 14px;
+        margin-right: 20px;
+        font-weight: bold;
+        color: #757575 !important;
+        opacity: 1;
+        width: 30px;
+        cursor: pointer;
+
+    }
+
+    #mask {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        z-index: 9;
+        top: 0;
+        left: 0;
+        opacity: 0.7;
+    }
+
+    #dialog {
+        display: none;
+        z-index: 9999999;
+        position: absolute;
+        top: 25%;
+        left: 35%;
+        background-color: white;
+        padding-left: 20px;
+        padding-right: 20px;
+        border: 1px solid #424242;
+        font-size: 14px;
+        padding-bottom: 20px;
+        color: #424242;
+        width: 358px;
+        height: 204px;
+        border-radius: 3px;
+
+    }
+    #newSuiteModalTitle {
+        margin-top: 20px;
+        padding-top: 3px;
+        height: 20px;
+        font-size: 16px;
+        color: black;
+        font-family: 'Lato' !important;
+        letter-spacing: 1px;
+        font-weight: 400;
+        background-image: url(assets/Folder-icon.png);
+        background-repeat: no-repeat;
+        background-size: 26px 26px;
+        background-position: 0px -3px;
+        padding-left: 40px;
+        user-select: none;
+        margin-bottom: 40px;
+        cursor: pointer;
+    }
+    #closeModalButton{
+        display: block;
+        opacity: 1;
+        float: right;
+        font-weight: bold;
+        color: #424242;
+        margin-right: -9px;
+        margin-top: 4px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    #newTestSuiteNameInput, #newTestCaseNameInput {
+        border-radius: 0px !important;
+        width: 240px;
+        margin-left: 0px;
+        display: inline-block;
+        border-bottom: 1px solid #E3E3F0;
+        border-width: 0 0 1px;
+        font-size: 14px;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    #saveNewPasswordButton, #exportButton, #runSuiteButton, #saveGridSettingsButton {
+        width: 80px;
+        height: 34px;
+        font-weight: normal !IMPORTANT;
+        font-size: 15px;
+        #background-color: #d83f87!important;
+        color: #fff;
+        border: 1px solid #d83f87;
+        #border-radius: 4px;
+        background: #DA3A87 0% 0% no-repeat padding-box !important;
+        border-radius: 4px;
+        opacity: 1;
+        cursor: pointer;
+    }
+    #confirmationNoButton, #cancelButton {
+        border-radius: 4px;
+        border: 1px solid #707070;
+        background-color: white;
+        width: 80px;
+        margin-left: 5px !important;
+        height: 34px;
+        color: #707070;
+        font-weight: 500 !important;
+        font-size: 15px;
+        opacity: 1;
+        /*鼠标变成小手状态*/
+        cursor: pointer;
+    }
+    input[type=text], input[type=password], select, textarea {
+        outline: none;
+        padding: 3px 0px 4px 3px;
+        margin: 5px 1px 3px 0px;
+        /* border: 1px solid #858585; */
+        background-color: white !important;
+        height: 40px;
+        padding-left: 5px !important;
+        margin-right: 5px !important;
+        /* color: #757575 !important; */
+        /* box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.1); */
+        border-radius: 3px;
+    }
+    #containerForButtons,#containerForNewTestSuiteName{
+        text-align: center;
+        margin-top: 30px;
+    }
+
+</style>
+
+<script>
+      $(document).ready(function(){
+          // 点击显示/消失 菜单
+          $(".dropdown").click(function(event){
+              let menu = $("#myDropdown");
+              if(menu.is(":visible")){
+                  $("#myDropdown").hide();
+              }
+              else {
+                  $("#myDropdown").show();
+              }
+              event.stopPropagation();
+          });
+          // 点击其他地方，菜单消失
+          $(document).click(function(){
+              $("#myDropdown").hide();
+          });
+
+          $("#addSuiteBtn").click(function (){
+              $('#mask').css({'display':'block'});
+              // $('#mask').css({
+              //     display: 'block',
+              //     height: $(document).height()
+              // });
+              $('#dialog').css({'display':'block'});
+          });
+          $('#mask').click(function(){
+              $('#mask').css({'display':'none'});
+              $('#dialog').css({'display':'none'});
+          });
+      });
+      function closenewSuiteModal(){
+          $('#mask').css({'display':'none'});
+          $('#dialog').css({'display':'none'});
+      }
+
+
+</script>
+</html>

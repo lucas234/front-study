@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="../public/favicon.ico">
+    <title>TestHub</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.staticfile.org/ionicons/2.0.1/css/ionicons.min.css">
+  </head>
+  <body>
+      <div style="margin-bottom: 15px">第一种: 只有选择后才会绑定数据
+          <button class="btn btn-primary" onclick="displayRegions()">显示选中的区域</button></div>
+      <div style="display: inline-block">
+          <label for="province"></label><select onmousedown="if(this.options.length>7){this.size=8}" onblur="this.size=0" onchange="this.size=0" class="regions" id="province" name="province">
+              <option id="choosePro" value="" selected>省</option>
+          </select>
+          <label for="cities"></label><select class="regions" id="cities" name="city">
+                <option id='chooseCity' value=''>市</option>
+          </select>
+          <label for="county"></label><select class="regions" id="county" name="county">
+                <option id='chooseCounty' value=''>地区</option>
+          </select>
+      </div>
+      <div style="margin-bottom: 15px;margin-top: 30px;">第二种: 选择省份后，默认绑定第一个市和第一个县</div>
+      <div style="display: inline-block">
+          <label for="province"></label><select class="regions" id="province2" name="province">
+          <option id="choosePro2" value="" selected>省</option>
+      </select>
+          <label for="cities"></label><select class="regions" id="cities2" name="city">
+          <option id='chooseCity2' value=''>市</option>
+      </select>
+          <label for="county"></label><select class="regions" id="county2" name="county">
+          <option id='chooseCounty2' value=''>地区</option>
+      </select>
+      </div>
+      <div style="margin-bottom: 15px;margin-top: 30px;">第三种: 利用div自定义 dropdown</div>
+      <div class="dropdown" tabindex="-1">
+            <input class="search" autocomplete="on" tabindex="0" placeholder="省">
+            <i class="icon ion-arrow-down-b"></i>
+            <div class="menu" style="display: none">
+                <div class="message" >No results found.</div>
+            </div>
+      </div>
+  </body>
+<style>
+    .regions {
+        display: inline-block;
+        width: 180px;
+        /*height: 34px;*/
+        height: auto;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .regions:hover {
+        border-color: #66afe9;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+    }
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .btn-primary {
+        color: #fff;
+        background-color: #428bca;
+        border-color: #357ebd;
+    }
+
+
+
+/* 第三种 */
+    .dropdown {
+        cursor: pointer;
+        line-height: 1em;
+        white-space: normal;
+        outline: 0;
+        transform: rotateZ(0);
+        min-width: 175px;
+        min-height: 13px;
+        background: #fff;
+        display: inline-block;
+        padding: 7px 7px;
+        color: rgba(0,0,0,.87);
+        box-shadow: none;
+        border: 1px solid rgba(34,36,38,.15);
+        border-radius: .28571429rem;
+        transition: box-shadow .1s ease,width .1s ease,-webkit-box-shadow .1s ease;
+    }
+    .dropdown:hover{
+        border-color: #66afe9;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+    }
+    .search{
+        /*font-size: 1em;*/
+        position: relative;
+        border: 0;
+        outline: none;
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 4px;
+        width: 155px;
+        font-size: 14px;
+    }
+
+  i.icon.ion-arrow-down-b{
+    font-size: 12.5px;
+      color: #4e4d4d;
+  }
+  .message{
+      display: none;
+      font-size: 14px;
+      color: #5b5c5d;
+  }
+  .menu{
+      height:150px;
+      width:auto;
+      overflow-y:auto;
+      background-color: #f9f9f9;
+      margin-top: 6px;
+  }
+    .test{
+        background-color: #efef4c;
+    }
+  .item{
+      font-size: 14px;
+      padding: 6px 2px;
+  }
+  .item:hover {
+      background-color: #f1f1f1;
+  }
+    /*scroll bar style only apply in chrome*/
+    .menu::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 8px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 8px;
+    }
+    .menu::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        background: rgba(0,0,0,.1);
+        border-radius: 5px;
+    }
+    .menu::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        cursor: pointer;
+        border-radius: 5px;
+        background-color: rgba(0,0,0,.25);
+        -webkit-transition: color .2s ease;
+        transition: color .2s ease;
+    }
+
+
+</style>
+<script>
+    <!-- 只有设置成同步时,Ajax中的变量才可以赋值成功 -->
+    $.ajaxSetup({async :false});
+    function getProvinces(){
+        let objProvince = [];
+        $.get("regions/province.json",function (obj){
+            objProvince = obj.reverse();
+        });
+        return objProvince;
+    }
+    function getCities(){
+        let objCity = [];
+        $.get("regions/city.json", function (obj){
+            objCity = obj;
+        });
+        return objCity
+    }
+    function getCounties(){
+        let objCountry = []
+        $.get("regions/county.json", function (obj){
+            objCountry = obj;
+        });
+        return objCountry
+    }
+    function displayRegions(){
+        let html = "";
+        let provinceSelected = $("#province option:selected");
+        let citySelected = $("#cities option:selected");
+        let countySelected = $("#county option:selected");
+        html += provinceSelected.val() ? " "+ provinceSelected.html() : "";
+        html += citySelected.val() ? " "+ citySelected.html() : "";
+        html += countySelected.val() ? " "+ countySelected.html() : "";
+        alert(html)
+    }
+
+    $(function(){
+        // 开始写 jQuery 代码...
+        $.each(getProvinces(), function (i, val){
+            $("#choosePro").after("<option value='"+val.id+"'>"+val.name+"</option>");
+        });
+
+        $("#province").change(function (){
+            $("#cities").find("option").remove();
+            $("#county").find("option").remove();
+            $("#cities").append("<option id='chooseCity' value=''>市</option>");
+            $("#county").append("<option id='chooseCounty' value=''>地区</option>");
+            let province = $(this).val();
+            if (province !== "") {
+                let objCity = getCities();
+                let cities = objCity[province];
+                $.each(cities, function (i, val){
+                    $("#chooseCity").after("<option value='"+val.id+"'>"+val.name+"</option>");
+                });
+            }
+        });
+
+        $("#cities").change(function (){
+            $("#county").find("option").remove();
+            $("#county").append("<option id='chooseCounty' value=''>地区</option>");
+            let city = $(this).val();
+            if (city !== "") {
+                let objCounty = getCounties();
+                let counties = objCounty[city];
+                $.each(counties, function (i, val){
+                    $("#chooseCounty").after("<option value='"+val.id+"'>"+val.name+"</option>");
+                });
+            }
+        });
+
+        //第二种
+        $.each(getProvinces(), function (i, val){
+            $("#choosePro2").after("<option value='"+val.id+"'>"+val.name+"</option>");
+        });
+
+        $("#province2").change(function (){
+
+            $("#cities2").find("option").remove();
+            $("#county2").find("option").remove();
+            let province = $(this).val();
+            if (province === "") {
+                $("#cities2").append("<option id='chooseCity2' value=''>市</option>");
+                $("#county2").append("<option id='chooseCounty2' value=''>地区</option>");
+            }
+            else{
+                $("#cities2").append("<option id='chooseCity2' value=''>市</option>");
+                $("#county2").append("<option id='chooseCounty2' value=''>地区</option>");
+                let objCity = getCities();
+                let cities = objCity[province];
+                $.each(cities, function (i, val){
+                    $("#chooseCity2").after("<option value='"+val.id+"'>"+val.name+"</option>");
+                });
+                let firstCity = $("#chooseCity2").next().val()
+                // 直接显示第一个市
+                $("#chooseCity2").remove();
+                let countryResults = getCounties();
+                let counties2 = countryResults[firstCity];
+                $.each(counties2,function (i, val){
+                    $("#chooseCounty2").after("<option value='"+val.id+"'>"+val.name+"</option>");
+                });
+                // 直接显示第一个县
+                $("#chooseCounty2").remove();
+            }
+        });
+        $("#cities2").change(function (){
+            $("#county2").find("option").remove();
+            $("#county2").append("<option id='chooseCounty2' value=''>地区</option>");
+            let city = $(this).val();
+            if (city !== "") {
+                let objCounty = getCounties();
+                let counties = objCounty[city];
+                $.each(counties, function (i, val){
+                    $("#chooseCounty2").after("<option value='"+val.id+"'>"+val.name+"</option>");
+                });
+            }
+            $("#chooseCounty2").remove();
+        });
+
+    });
+
+
+    $(".search").on("input",function(e){
+        let search = $('.search ');
+        let key=search.val();
+        let flagCount = 0;
+        $('.item').each(function(i,item){
+            if($(this).text().indexOf(key)>-1){
+                $(this).show();
+                flagCount += 1;
+                e.stopPropagation();
+            }else
+                $(this).hide();
+                e.stopPropagation();
+        });
+        if(flagCount===0){
+            $('.message').css({"display":"block"});
+        }
+    })
+
+    $(function (){
+        let menu = $(".menu");
+        let search = $(".search");
+        search.click(function (e){
+            $('.message').css({"display":"none"});
+            menu.show()
+            e.stopPropagation();
+        });
+        $(document).click(function(e){
+            menu.hide();
+            e.stopPropagation();
+        });
+        $(".item").click(function (e){
+            menu.hide();
+            e.stopPropagation();
+            search.val($(this).html());
+            $(".item").css({"font-weight":"normal"});
+            $(this).css({"font-weight":"bold"});
+        });
+        $('.icon').click(function (e){
+            if(menu.css('display') === 'none'){
+                menu.show();
+                e.stopPropagation();
+            }else {
+                menu.hide();
+            }
+        })
+    })
+
+    $('.search').focus(function(){
+        $('.item').each(function(i,item){
+            $(this).show();
+        });
+        if(this.value) {
+            this.placeholder=this.value;
+            this.value=''
+        }
+    }).blur(function(){
+        if (this.placeholder!=='省') {
+            this.value=this.placeholder;
+            this.placeholder='省';
+        }
+    })
+    // onfocus="if(value) {this.placeholder=value;value=''}" onblur="if (placeholder!=='省') {value=this.placeholder;this.placeholder='省'}"
+
+    let drop_province = [
+        {
+            "name": "北京市",
+            "id": "110000000000"
+        },
+        {
+            "name": "天津市",
+            "id": "120000000000"
+        },
+        {
+            "name": "河北省",
+            "id": "130000000000"
+        },
+        {
+            "name": "山西省",
+            "id": "140000000000"
+        },
+        {
+            "name": "内蒙古自治区",
+            "id": "150000000000"
+        },
+        {
+            "name": "辽宁省",
+            "id": "210000000000"
+        },
+        {
+            "name": "吉林省",
+            "id": "220000000000"
+        },
+        {
+            "name": "黑龙江省",
+            "id": "230000000000"
+        },
+        {
+            "name": "上海市",
+            "id": "310000000000"
+        },
+        {
+            "name": "江苏省",
+            "id": "320000000000"
+        },
+        {
+            "name": "浙江省",
+            "id": "330000000000"
+        },
+        {
+            "name": "安徽省",
+            "id": "340000000000"
+        },
+        {
+            "name": "福建省",
+            "id": "350000000000"
+        },
+        {
+            "name": "江西省",
+            "id": "360000000000"
+        },
+        {
+            "name": "山东省",
+            "id": "370000000000"
+        },
+        {
+            "name": "河南省",
+            "id": "410000000000"
+        },
+        {
+            "name": "湖北省",
+            "id": "420000000000"
+        },
+        {
+            "name": "湖南省",
+            "id": "430000000000"
+        },
+        {
+            "name": "广东省",
+            "id": "440000000000"
+        },]
+
+    $.each(drop_province, function (i, val){
+        $(".menu").prepend("<div class='item' data-value='"+val.id+"'>"+val.name+"</div>");
+    });
+
+
+</script>
+</html>

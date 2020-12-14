@@ -1,0 +1,90 @@
+.dropdown {
+    cursor: pointer;
+    line-height: 1em;
+    white-space: normal;
+    outline: 0;
+    transform: rotateZ(0);
+    min-width: 160px;
+    min-height: 13px;
+    background: #fff;
+    display: inline-block;
+    padding: 7px 7px;
+    color: rgba(0,0,0,.87);
+    box-shadow: none;
+    border: 1px solid rgba(34,36,38,.15);
+    border-radius: .28571429rem;
+    transition: box-shadow .1s ease,width .1s ease,-webkit-box-shadow .1s ease;
+}
+.dropdown:hover{
+    border-color: #66afe9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}
+.search{
+    /*font-size: 1em;*/
+    position: absolute;
+    border: 0;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 4px;
+    width: 149px;
+    font-size: 14px;
+    z-index: 2;
+}
+
+i.icon.ion-arrow-down-b{
+    font-size: 12px;
+    color: #4e4d4d;
+    z-index: 3;
+    position: absolute;
+    opacity: .8;
+    right: 8px;
+    padding-top: 1px;
+}
+.search,.text{
+    display: inline-block;
+}
+.text{
+    cursor: text;
+    position: relative;
+    left: 1px;
+    z-index: 3;
+    font-size: 14px;
+    color: #cdcbcb;
+}
+.message{
+    display: none;
+    font-size: 14px;
+    color: #a1a3a5;
+}
+.menu{
+    max-height: 170px;
+    width:auto;
+    overflow-y:auto;
+    margin-top: 6px;
+    position: relative;
+}
+.item{
+    font-size: 14px;
+    padding: 6px 2px;
+}
+.item:hover {
+    background-color: #f1f1f1;
+}
+/*scroll bar style only apply in chrome*/
+.menu::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 8px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 8px;
+}
+.menu::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,.1);
+    border-radius: 5px;
+}
+.menu::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,.25);
+    -webkit-transition: color .2s ease;
+    transition: color .2s ease;
+}
