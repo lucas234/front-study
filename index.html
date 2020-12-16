@@ -35,14 +35,12 @@
           <option id='chooseCounty2' value=''>地区</option>
       </select>
       </div>
+
       <div style="margin-bottom: 15px;margin-top: 30px;">第三种: 利用div自定义 dropdown</div>
-      <div class="dropdown" tabindex="-1">
-            <input class="search" autocomplete="on" tabindex="0" placeholder="省">
-            <i class="icon ion-arrow-down-b"></i>
-            <div class="menu" style="display: none">
-                <div class="message" >No results found.</div>
-            </div>
-      </div>
+      <a href="./dropdown/dropdownTest.html" target="_blank">
+          <button>自定义 dropdown</button>
+      </a>
+
       <div style="margin-bottom: 15px;margin-top: 30px;">弹窗测试：</div>
       <a href="./dialog/dialogTest.html" target="_blank">
           <button>弹窗测试</button>
@@ -101,59 +99,8 @@
 
 
 /* 第三种 */
-    .dropdown {
-        position: fixed;
-        cursor: pointer;
-        line-height: 1em;
-        white-space: normal;
-        outline: 0;
-        transform: rotateZ(0);
-        min-width: 175px;
-        min-height: 13px;
-        background: #fff;
-        display: inline-block;
-        padding: 7px 7px;
-        color: rgba(0,0,0,.87);
-        box-shadow: none;
-        border: 1px solid rgba(34,36,38,.15);
-        border-radius: .28571429rem;
-        transition: box-shadow .1s ease,width .1s ease,-webkit-box-shadow .1s ease;
-    }
-    .dropdown:hover{
-        border-color: #66afe9;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
-    }
-    .search{
-        /*font-size: 1em;*/
-        position: relative;
-        border: 0;
-        outline: none;
-        background-color: rgba(0, 0, 0, 0);
-        border-radius: 4px;
-        width: 155px;
-        font-size: 14px;
-    }
 
-  i.icon.ion-arrow-down-b{
-    font-size: 12.5px;
-      color: #4e4d4d;
-  }
-  .message{
-      display: none;
-      font-size: 14px;
-      color: #5b5c5d;
-  }
-  .menu{
-      height:150px;
-      width:auto;
-      overflow-y:auto;
-      background-color: #f9f9f9;
-      margin-top: 6px;
-  }
-    .test{
-        background-color: #efef4c;
-    }
+
   .item{
       font-size: 14px;
       padding: 6px 2px;
