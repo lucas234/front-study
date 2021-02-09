@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>24 TV CANLI YAYIN</title>
+	<script src="https://cdn.bootcss.com/video.js/7.7.6/video.min.js"></script>
+	<link href="https://cdn.bootcss.com/video.js/7.7.6/video-js.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js" integrity="sha512-R1+Pgd+uyqnjx07LGUmp85iW8MSL1iLR2ICPysFAt8Y4gub8C42B+aNG2ddOfCWcDDn1JPWZO4eby4+291xP9g==" crossorigin="anonymous"></script>
+</head>
+<body id='body'>
+  <!--<input id="m3u8-url" style="margin:5px" placeholder="请输入m3u8地址"> 
+  <button onclick="play()">播放</button>-->
+  <video id="my_video" class="video-js vjs-fluid vjs-default-skin" controls preload="auto"
+  data-setup='{}'>
+  </video>
+  
+<script>
+// 参考：https://blog.csdn.net/bbwangj/article/details/105414330
+// 参考：官网 https://docs.videojs.com/tutorial-options.html#playbackrates
+// url = http://baidu.com-l-baidu.com/20190121/10957_e8fc01c1/1000k/hls/index.m3u8
+
+//var url=document.getElementById("m3u8-url").value;  
+//var video = document.createElement("video");
+//var parent = document.getElementById('body');
+//video.setAttribute('id', 'my_video');
+//video.setAttribute('controls', true);
+//video.setAttribute('data-setup', '{}');
+//parent.appendChild(video);
+var player = videojs('my_video', {
+  playbackRates: [0.75, 1, 1.5, 2, 3.5],
+  muted: true,
+  //controls: true, // 是否显示控制条
+  //poster: 'xxx', // 视频封面图地址
+  //preload: 'auto',
+  //autoplay: false,
+  //fluid: true, // 自适应宽高
+  //language: 'zh-CN', // 设置语言
+  sources:[ // 视频源
+	  {
+		  src: 'https://qingxi.xi-zuida.com/20210131/172_c8fc2723/1000k/hls/index.m3u8',
+		  type: 'application/x-mpegURL',
+		  //poster: '//vjs.zencdn.net/v/oceans.png'
+	  }
+	]
+});
+player.play();
+
+function play(){
+  var data = 
+   	  {
+		  src: url,
+		  type: 'application/x-mpegURL',
+		  //poster: '//vjs.zencdn.net/v/oceans.png'
+	  };
+  // 销毁videojs
+  //player.dispose();
+  var player = videojs('my_video', {
+		playbackRates: [0.75, 1, 1.5, 2, 3.5],
+		muted: true,
+	});
+  player.pause();
+  player.src(data);
+  player.load(data);
+  // 动态切换poster
+  //player.posterImage.setSrc('xxx.jpg');
+  player.play();
+ 
+}
+
+</script>
+</body>
+</html>
